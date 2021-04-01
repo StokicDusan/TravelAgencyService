@@ -22,7 +22,7 @@ SET time_zone = "+00:00";
 -- Database: `travelagencydb1`
 --
 CREATE DATABASE IF NOT EXISTS `travelagencydb1` DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci;
-USE `zadatak2tema8`;
+USE `travelagencydb1`;
 
 -- --------------------------------------------------------
 
@@ -122,7 +122,7 @@ INSERT INTO `offer` (`offer_id`, `created_at`, `offer_type_id`, `country`, `loca
 (3, '2020-08-25 14:02:08', 3, 'Crna Gora', 'Budva', 'Hotel Aleksandar', 'Hotel Aleksandar je sezonski odmorišni hotel, smešten pored turističkog naselja “Slovenska plaža”. \r\nUsluga: Polupansion (doručak, večera) - švedski sto. Mogućnost doplate punog pansiona ili All Inclusive usluge. \r\nSmeštaj: Raspolaže komfornim sobama i apartmanima sa 2, 3, 4 i 5 ležaja, ukupnog kapaciteta 450 ležaja. Sve sobe i apartmani su klimatizovani, sa TV aparatom i kablovskim priključkom, standardno opremljeni. \r\nSadržaj hotela: Restoran, aperitiv i snek bar, poslastičarnica, dve banket sale, frizerski i kozmetički salon, parking i ostali sadržaji za ugodan odmor i zabavu. \r\nHotel, unutar objekta, poseduje otvoreni bazen sa morskom vodom, a ljubitelji otvorenog mora mogu da uživaju i na prelepoj plaži, smeštenoj uz sam hotel, koja pruža i sve ostale užitke rekreacije na pesku i moru. ', b'0'),
 (4, '2020-08-25 14:36:39', 1, 'Srbija', 'Vrnjačka banja', 'Hotel Merkur', 'Prednost banjskog turizma je u tome što se banje mogu posećivati i leti i zimi. \r\nBogate kulturno – istorijskim spomenicima, različitim manifestacijama i prirodnim motivima, one su podjedanako privlačne turistima u svako doba godine. \r\nBanje su pogodne, kako za odmor i rekreaciju, tako i za prevenciju i rehabilitaciju posetilaca u kombinaciji sa wellnes i spa centrima, u kojima gosti mogu uživati u masažama, hidromasažama, saunama, kupanju u bazenima sa termalnom vodom, đakuziju…\r\n\r\nNa celokupnoj teritoriji Srbije registrovano je oko 300 termomineralnih izvora. \r\nZavisno od geografskog položaja, klime, neke banje su se komercijalno izdvojile, uz razvijeniju infrastrukturu, pa boravak u njima pruža osećaj kao da ste u evropskim metropolama. \r\nNasuprot njima, neka banjska lečilišta su oaze mira, daleko od gradske gužve, u prirodnom netaknutom okruženju.', b'1'),
 (5, '2020-08-25 15:51:55', 1, 'Srbija', 'Zlatibor', 'Klub Satelit', 'Planina i vazdušna banja Zlatibor, sa najdužom turističkom tradicijom, nalazi se u Zapadnoj Srbiji, 230 km jugo-zapadno od Beograda. \r\nProsečna nadmorska visina je 1000 m. Za ljubitelje skijanja, na 7 km od centra Zlatibora se nalazi ski centar Tornik, najviši vrh ove prelepe planine.\r\nKlub Satelit jedan je od najtraženijih objekata za smeštaj na Zlatiboru kako kod domaćih tako i kod inostranih gostiju. \r\nDobitnik je brojnih priznanja za kvalitet rada.\r\nTri najvažnije karakteristike objekta jesu luksuzna opremljenost, nesvakidašnje prijatan ambijent i ljubazno osoblje. \r\nSvi apartmani i sobe su unikatno uređeni tako da ispunjavaju očekivanja i zahtevnijih hedonista.', b'1'),
-(6, '2020-08-25 15:53:00', 1, 'Srbija', 'Zlatibor', 'Hotel Mona', 'Planina i vazdušna banja Zlatibor, sa najdužom turističkom tradicijom, nalazi se u Zapadnoj Srbiji, 230 km jugo-zapadno od Beograda. \r\nProsečna nadmorska visina je 1000 m. Za ljubitelje skijanja, na 7 km od centra Zlatibora se nalazi ski centar Tornik, najviši vrh ove prelepe planine.\r\nHotel Zlatibor Mona, nalazi se u samom centru Zlatibora, u neposrednoj blizini svih sadržaja ovog turističkog centra. Udaljen je 235 km jugozapadno od Beograda.', b'1'),
+(6, '2020-08-25 15:53:00', 1, 'Srbija', 'Zlatibor', 'Hotel Mona', 'Planina i vazdušna banja Zlatibor, sa najdužom turističkom tradicijom, nalazi se u Zapadnoj Srbiji, 230 km jugo-zapadno od Beograda. \r\nProsečna nadmorska visina je 1000 m. Za ljubitelje skijanja, na 7 km od centra Zlatibora se nalazi ski centar Tornik, najviši vrh ove prelepe planine.\r\nHotel Zlatibor Mona, nalazi se u samom centru Zlatibora, u neposrednoj blizini svih sadržaja ovog turističkog centra. Udaljen je 235 km jugozapadno od Beograda.', b'1');
 
 -- --------------------------------------------------------
 
@@ -148,7 +148,7 @@ CREATE TABLE IF NOT EXISTS `offer_picture` (
 
 INSERT INTO `offer_picture` (`offer_picture_id`, `created_at`, `offer_id`, `name`, `short_description`, `active`) VALUES
 (1, '2020-08-25 16:56:26', 1, 'bukovacka_banja_11.png', 'hotel izvor', b'1'),
-(2, '2020-08-25 17:37:49', 5, 'zlatibor_111.png', 'hotel', b'1'),
+(2, '2020-08-25 17:37:49', 5, 'zlatibor_111.png', 'hotel', b'1');
 
 -- --------------------------------------------------------
 
