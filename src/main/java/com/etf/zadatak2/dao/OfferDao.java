@@ -1,8 +1,8 @@
 package com.etf.zadatak2.dao;
 
-import com.etf.zadatak2.data.Ponuda;
-import com.etf.zadatak2.data.PonudaVrsta;
-import com.etf.zadatak2.exception.Zadatak2Exception;
+import com.etf.zadatak2.data.Offer;
+import com.etf.zadatak2.data.OfferType;
+import com.etf.zadatak2.exception.AgencyException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -13,35 +13,35 @@ import java.util.List;
 
 /**
  *
- * @author Dušan Stokić 2013/0625
+ * @author Dušan Stokić
  */
-public class PonudaDao {
+public class OfferDao {
 
-    private static final PonudaDao instance = new PonudaDao();
+    private static final OfferDao instance = new OfferDao();
 
-    public PonudaDao() {
+    public OfferDao() {
     }
 
-    public static PonudaDao getInstance() {
+    public static OfferDao getInstance() {
         return instance;
     }
 
-    public int insert(Ponuda ponuda, Connection con) throws SQLException, Zadatak2Exception {
+    public int insert(Offer offer, Connection con) throws SQLException, AgencyException {
         PreparedStatement ps = null;
         ResultSet rs = null;
         int id = -1;
         try {
-            ps = con.prepareStatement("INSERT INTO `ponuda`(`ponuda_vrsta_id`, `drzava`, `mesto`,`naziv`,`opis`, `aktivna`) VALUES(?,?,?,?,?,?)", Statement.RETURN_GENERATED_KEYS);
-            PonudaVrsta ponuda_vrsta = PonudaVrstaDao.getInstance().find(ponuda.getPonuda_vrsta().getPonuda_vrsta_id(), con);
-            if (ponuda_vrsta == null) {
-                throw new Zadatak2Exception("Ponuda " + ponuda + " Ne postoji u bazi.");
+            ps = con.prepareStatement("INSERT INTO `offer`(`offer_type_id`, `country`, `location`,`name`,`description`, `active`) VALUES(?,?,?,?,?,?)", Statement.RETURN_GENERATED_KEYS);
+            OfferType offer_type = OfferTypeDao.getInstance().find(offer.getOffer_type().getOffer_type_id(), con);
+            if (offer_type == null) {
+                throw new AgencyException("Offer " + offer + " does not exist in the database.");
             }
-            ps.setInt(1, ponuda_vrsta.getPonuda_vrsta_id());
-            ps.setString(2, ponuda.getDrzava());
-            ps.setString(3, ponuda.getMesto());
-            ps.setString(4, ponuda.getNaziv());
-            ps.setString(5, ponuda.getOpis());
-            ps.setBoolean(6, ponuda.getAktivna());
+            ps.setInt(1, offer_type.getOffer_type_id());
+            ps.setString(2, offer.getCountry());
+            ps.setString(3, offer.getLocation());
+            ps.setString(4, offer.getName());
+            ps.setString(5, offer.getDescription());
+            ps.setBoolean(6, offer.getActive());
             ps.executeUpdate();
             rs = ps.getGeneratedKeys();
             rs.next();
@@ -52,130 +52,130 @@ public class PonudaDao {
         return id;
     }
 
-    public Ponuda find(int ponuda_id, Connection con) throws SQLException {
+    public Offer find(int offer_id, Connection con) throws SQLException {
         PreparedStatement ps = null;
         ResultSet rs = null;
-        Ponuda ponuda = null;
+        Offer offer = null;
         try {
-            ps = con.prepareStatement("SELECT * FROM `ponuda` WHERE `ponuda_id`=?");
-            ps.setInt(1, ponuda_id);
+            ps = con.prepareStatement("SELECT * FROM `offer` WHERE `offer_id`=?");
+            ps.setInt(1, offer_id);
             rs = ps.executeQuery();
             if (rs.next()) {
-                PonudaVrsta ponuda_vrsta = PonudaVrstaDao.getInstance().find(rs.getInt("ponuda_vrsta_id"), con);
-                ponuda = new Ponuda(rs.getInt("ponuda_id"), ponuda_vrsta, rs.getString("drzava"), rs.getString("mesto"), rs.getString("naziv"), rs.getString("opis"), rs.getBoolean("aktivna"));
+                OfferType offer_type = OfferTypeDao.getInstance().find(rs.getInt("offer_type_id"), con);
+                offer = new Offer(rs.getInt("offer_id"), offer_type, rs.getString("country"), rs.getString("location"), rs.getString("name"), rs.getString("description"), rs.getBoolean("active"));
             }
         } finally {
             ResourcesManager.closeResources(rs, ps);
         }
-        return ponuda;
+        return offer;
     }
 
-    public List<Ponuda> findAllByMesto(String mesto, Connection con) throws SQLException {
+    public List<Offer> findAllByLocation(String location, Connection con) throws SQLException {
         PreparedStatement ps = null;
         ResultSet rs = null;
-        List<Ponuda> ponudaList = new ArrayList<>();
+        List<Offer> offerList = new ArrayList<>();
         try {
-            ps = con.prepareStatement("SELECT * FROM `ponuda` WHERE `mesto`=? ORDER BY `naziv` ASC");
-            ps.setString(1, mesto);
+            ps = con.prepareStatement("SELECT * FROM `offer` WHERE `location`=? ORDER BY `name` ASC");
+            ps.setString(1, location);
             rs = ps.executeQuery();
             while (rs.next()) {
-                PonudaVrsta ponuda_vrsta = PonudaVrstaDao.getInstance().find(rs.getInt("ponuda_vrsta_id"), con);
-                Ponuda ponuda = new Ponuda(rs.getInt("ponuda_id"), ponuda_vrsta, rs.getString("drzava"), rs.getString("mesto"), rs.getString("naziv"), rs.getString("opis"), rs.getBoolean("aktivna"));
-                ponudaList.add(ponuda);
+                OfferType offer_type = OfferTypeDao.getInstance().find(rs.getInt("offer_type_id"), con);
+                Offer offer = new Offer(rs.getInt("offer_id"), offer_type, rs.getString("country"), rs.getString("location"), rs.getString("name"), rs.getString("description"), rs.getBoolean("active"));
+                offerList.add(offer);
             }
         } finally {
             ResourcesManager.closeResources(rs, ps);
         }
-        return ponudaList;
+        return offerList;
     }
 
-    public List<Ponuda> findAllByPonudaVrsta(PonudaVrsta ponuda_vrsta, Connection con) throws SQLException {
+    public List<Offer> findAllByOfferType(OfferType offer_type, Connection con) throws SQLException {
         PreparedStatement ps = null;
         ResultSet rs = null;
-        List<Ponuda> ponudaList = new ArrayList<>();
+        List<Offer> offerList = new ArrayList<>();
         try {
-            ps = con.prepareStatement("SELECT * FROM `ponuda` WHERE `ponuda_vrsta_id`=?  ORDER BY `drzava` ASC");
-            ps.setInt(1, ponuda_vrsta.getPonuda_vrsta_id());
+            ps = con.prepareStatement("SELECT * FROM `offer` WHERE `offer_type_id`=?  ORDER BY `country` ASC");
+            ps.setInt(1, offer_type.getOffer_type_id());
             rs = ps.executeQuery();
             while (rs.next()) {
-                Ponuda ponuda = new Ponuda(rs.getInt("ponuda_id"), ponuda_vrsta, rs.getString("drzava"), rs.getString("mesto"), rs.getString("naziv"), rs.getString("opis"), rs.getBoolean("aktivna"));
-                ponudaList.add(ponuda);
+                Offer offer = new Offer(rs.getInt("offer_id"), offer_type, rs.getString("country"), rs.getString("location"), rs.getString("name"), rs.getString("description"), rs.getBoolean("active"));
+                offerList.add(offer);
             }
         } finally {
             ResourcesManager.closeResources(rs, ps);
         }
-        return ponudaList;
+        return offerList;
     }
 
-    public List<Ponuda> findAllByDrzava(String drzava, String opis, Connection con) throws SQLException {
+    public List<Offer> findAllByCountry(String country, String description, Connection con) throws SQLException {
         PreparedStatement ps = null;
         ResultSet rs = null;
-        List<Ponuda> ponudaList = new ArrayList<>();
+        List<Offer> offerList = new ArrayList<>();
         try {
-            if (opis != null) {
-                ps = con.prepareStatement("SELECT * FROM `ponuda` WHERE `drzava`=? AND `opis` LIKE ? ORDER BY `mesto` ASC");
-                ps.setString(1, drzava);
-                ps.setString(2, "%" + opis + "%");
+            if (description != null) {
+                ps = con.prepareStatement("SELECT * FROM `offer` WHERE `country`=? AND `description` LIKE ? ORDER BY `location` ASC");
+                ps.setString(1, country);
+                ps.setString(2, "%" + description + "%");
             } else {
-                ps = con.prepareStatement("SELECT * FROM `ponuda` WHERE `drzava`=?");
-                ps.setString(1, drzava);
+                ps = con.prepareStatement("SELECT * FROM `offer` WHERE `country`=?");
+                ps.setString(1, country);
             }
 
             rs = ps.executeQuery();
             while (rs.next()) {
-                PonudaVrsta ponuda_vrsta = PonudaVrstaDao.getInstance().find(rs.getInt("ponuda_vrsta_id"), con);
-                Ponuda ponuda = new Ponuda(rs.getInt("ponuda_id"), ponuda_vrsta, rs.getString("drzava"), rs.getString("mesto"), rs.getString("naziv"), rs.getString("opis"), rs.getBoolean("aktivna"));
-                ponudaList.add(ponuda);
+                OfferType offer_type = OfferTypeDao.getInstance().find(rs.getInt("offer_type_id"), con);
+                Offer offer = new Offer(rs.getInt("offer_id"), offer_type, rs.getString("country"), rs.getString("location"), rs.getString("name"), rs.getString("description"), rs.getBoolean("active"));
+                offerList.add(offer);
             }
         } finally {
             ResourcesManager.closeResources(rs, ps);
         }
-        return ponudaList;
+        return offerList;
     }
 
-    public List<Ponuda> findAll(Connection con) throws SQLException {
+    public List<Offer> findAll(Connection con) throws SQLException {
         PreparedStatement ps = null;
         ResultSet rs = null;
-        List<Ponuda> ponudaList = new ArrayList<>();
+        List<Offer> offerList = new ArrayList<>();
         try {
-            ps = con.prepareStatement("SELECT * FROM `ponuda`");
+            ps = con.prepareStatement("SELECT * FROM `offer`");
             rs = ps.executeQuery();
             while (rs.next()) {
-                PonudaVrsta ponuda_vrsta = PonudaVrstaDao.getInstance().find(rs.getInt("ponuda_vrsta_id"), con);
-                Ponuda ponuda = new Ponuda(rs.getInt("ponuda_id"), ponuda_vrsta, rs.getString("drzava"), rs.getString("mesto"), rs.getString("naziv"), rs.getString("opis"), rs.getBoolean("aktivna"));
-                ponudaList.add(ponuda);
+                OfferType offer_type = OfferTypeDao.getInstance().find(rs.getInt("offer_type_id"), con);
+                Offer offer = new Offer(rs.getInt("offer_id"), offer_type, rs.getString("country"), rs.getString("location"), rs.getString("name"), rs.getString("description"), rs.getBoolean("active"));
+                offerList.add(offer);
             }
         } finally {
             ResourcesManager.closeResources(rs, ps);
         }
-        return ponudaList;
+        return offerList;
     }
 
-    public void update(Ponuda ponuda, Connection con) throws SQLException {
+    public void update(Offer offer, Connection con) throws SQLException {
         PreparedStatement ps = null;
         try {
-            ps = con.prepareStatement("UPDATE `ponuda` SET `drzava`=?, `mesto`=?,`naziv`=?, `opis`=?, `aktivna`=? WHERE `ponuda_id`=?");
-            ps.setString(1, ponuda.getDrzava());
-            ps.setString(2, ponuda.getMesto());
-            ps.setString(3, ponuda.getNaziv());
-            ps.setString(4, ponuda.getOpis());
-            ps.setBoolean(5, ponuda.getAktivna());
-            ps.setInt(6, ponuda.getPonuda_id());
+            ps = con.prepareStatement("UPDATE `offer` SET `country`=?, `location`=?,`name`=?, `description`=?, `active`=? WHERE `offer_id`=?");
+            ps.setString(1, offer.getCountry());
+            ps.setString(2, offer.getLocation());
+            ps.setString(3, offer.getName());
+            ps.setString(4, offer.getDescription());
+            ps.setBoolean(5, offer.getActive());
+            ps.setInt(6, offer.getOffer_id());
             ps.executeUpdate();
         } finally {
             ResourcesManager.closeResources(null, ps);
         }
     }
 
-    public void delete(Ponuda ponuda, Connection con) throws SQLException {
+    public void delete(Offer offer, Connection con) throws SQLException {
         PreparedStatement ps = null;
         try {
 
-            AranzmanDao.getInstance().delete(ponuda, con);
-            PonudaSlikaDao.getInstance().delete(ponuda, con);
+            ArrangementDao.getInstance().delete(offer, con);
+            OfferPictureDao.getInstance().delete(offer, con);
 
-            ps = con.prepareStatement("DELETE FROM `ponuda` WHERE `ponuda_id`=?");
-            ps.setInt(1, ponuda.getPonuda_id());
+            ps = con.prepareStatement("DELETE FROM `offer` WHERE `offer_id`=?");
+            ps.setInt(1, offer.getOffer_id());
             ps.executeUpdate();
         } finally {
             ResourcesManager.closeResources(null, ps);

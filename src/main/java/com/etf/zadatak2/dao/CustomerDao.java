@@ -1,8 +1,8 @@
 package com.etf.zadatak2.dao;
 
-import com.etf.zadatak2.data.Adresa;
-import com.etf.zadatak2.data.Kontakt;
-import com.etf.zadatak2.data.Korisnik;
+import com.etf.zadatak2.data.Address;
+import com.etf.zadatak2.data.Contact;
+import com.etf.zadatak2.data.Customer;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -11,31 +11,31 @@ import java.sql.Statement;
 
 /**
  *
- * @author Dušan Stokić 2013/0625
+ * @author Dušan Stokić
  */
-public class KorisnikDao {
+public class CustomerDao {
 
-    private static final KorisnikDao instance = new KorisnikDao();
+    private static final CustomerDao instance = new CustomerDao();
 
-    public KorisnikDao() {
+    public CustomerDao() {
     }
 
-    public static KorisnikDao getInstance() {
+    public static CustomerDao getInstance() {
         return instance;
     }
 
-    public void insert(Korisnik korisnik, Connection con) throws SQLException {
+    public void insert(Customer customer, Connection con) throws SQLException {
         PreparedStatement ps = null;
         ResultSet rs = null;
         try {
-            ps = con.prepareStatement("INSERT INTO `korisnik`(`adresa_id`,`kontakt_id`,`ime`,`prezime`) VALUES(?,?,?,?)", Statement.RETURN_GENERATED_KEYS);
+            ps = con.prepareStatement("INSERT INTO `customer`(`address_id`,`contact_id`,`name`,`surname`) VALUES(?,?,?,?)", Statement.RETURN_GENERATED_KEYS);
 
-            Integer adresa_id = AdresaDao.getInstance().insert(korisnik.getAdresa(), con);
-            Integer kontakt_id = KontaktDao.getInstance().insert(korisnik.getKontakt(), con);
-            ps.setInt(1, adresa_id);
-            ps.setInt(2, kontakt_id);
-            ps.setString(3, korisnik.getIme());
-            ps.setString(4, korisnik.getPrezime());
+            Integer address_id = AddressDao.getInstance().insert(customer.getAddress(), con);
+            Integer contact_id = ContactDao.getInstance().insert(customer.getContact(), con);
+            ps.setInt(1, address_id);
+            ps.setInt(2, contact_id);
+            ps.setString(3, customer.getName());
+            ps.setString(4, customer.getSurname());
             ps.executeUpdate();
             rs = ps.getGeneratedKeys();
         } finally {
@@ -43,91 +43,91 @@ public class KorisnikDao {
         }
     }
 
-    public Korisnik find(int korisnik_id, Connection con) throws SQLException {
+    public Customer find(int customer_id, Connection con) throws SQLException {
         PreparedStatement ps = null;
         ResultSet rs = null;
-        Korisnik korisnik = null;
+        Customer customer = null;
         try {
-            ps = con.prepareStatement("SELECT * FROM `korisnik` WHERE `korisnik_id`=?");
-            ps.setInt(1, korisnik_id);
+            ps = con.prepareStatement("SELECT * FROM `customer` WHERE `customer_id`=?");
+            ps.setInt(1, customer_id);
             rs = ps.executeQuery();
             if (rs.next()) {
-                Adresa adresa = AdresaDao.getInstance().find(rs.getInt("adresa_id"), con);
-                Kontakt kontakt = KontaktDao.getInstance().find(rs.getInt("kontakt_id"), con);
-                korisnik = new Korisnik(rs.getInt("korisnik_id"), kontakt, adresa, rs.getString("ime"), rs.getString("prezime"));
+                Address address = AddressDao.getInstance().find(rs.getInt("address_id"), con);
+                Contact contact = ContactDao.getInstance().find(rs.getInt("contact_id"), con);
+                customer = new Customer(rs.getInt("customer_id"), contact, address, rs.getString("name"), rs.getString("surname"));
             }
         } finally {
             ResourcesManager.closeResources(rs, ps);
         }
-        return korisnik;
+        return customer;
     }
 
-    public Korisnik find(Adresa adresa, Connection con) throws SQLException {
+    public Customer find(Address address, Connection con) throws SQLException {
         PreparedStatement ps = null;
         ResultSet rs = null;
-        Korisnik korisnik = null;
+        Customer customer = null;
         try {
-            ps = con.prepareStatement("SELECT * FROM `korisnik` WHERE `adresa_id`=?");
-            ps.setInt(1, adresa.getAdresa_id());
+            ps = con.prepareStatement("SELECT * FROM `customer` WHERE `address_id`=?");
+            ps.setInt(1, address.getAddress_id());
             rs = ps.executeQuery();
             if (rs.next()) {
-                Kontakt kontakt = KontaktDao.getInstance().find(rs.getInt("kontakt_id"), con);
-                korisnik = new Korisnik(rs.getInt("korisnik_id"), kontakt, adresa, rs.getString("ime"), rs.getString("prezime"));
+                Contact contact = ContactDao.getInstance().find(rs.getInt("contact_id"), con);
+                customer = new Customer(rs.getInt("customer_id"), contact, address, rs.getString("name"), rs.getString("surname"));
             }
         } finally {
             ResourcesManager.closeResources(rs, ps);
         }
-        return korisnik;
+        return customer;
     }
 
-    public Korisnik find(Kontakt kontakt, Connection con) throws SQLException {
+    public Customer find(Contact contact, Connection con) throws SQLException {
         PreparedStatement ps = null;
         ResultSet rs = null;
-        Korisnik korisnik = null;
+        Customer customer = null;
         try {
-            ps = con.prepareStatement("SELECT * FROM `korisnik` WHERE `kontakt_id`=?");
-            ps.setInt(1, kontakt.getKontakt_id());
+            ps = con.prepareStatement("SELECT * FROM `customer` WHERE `contact_id`=?");
+            ps.setInt(1, contact.getContact_id());
             rs = ps.executeQuery();
             if (rs.next()) {
-                Adresa adresa = AdresaDao.getInstance().find(rs.getInt("adresa_id"), con);
-                korisnik = new Korisnik(rs.getInt("korisnik_id"), kontakt, adresa, rs.getString("ime"), rs.getString("prezime"));
+                Address address = AddressDao.getInstance().find(rs.getInt("address_id"), con);
+                customer = new Customer(rs.getInt("customer_id"), contact, address, rs.getString("name"), rs.getString("surname"));
             }
         } finally {
             ResourcesManager.closeResources(rs, ps);
         }
-        return korisnik;
+        return customer;
     }
 
-    public void update(Korisnik korisnik, Connection con) throws SQLException {
+    public void update(Customer customer, Connection con) throws SQLException {
         PreparedStatement ps = null;
         try {
 
-            ps = con.prepareStatement("UPDATE `korisnik` SET `ime`=?, `prezime`=? WHERE `korisnik_id`=?");
-            ps.setString(1, korisnik.getIme());
-            ps.setString(2, korisnik.getPrezime());
-            ps.setInt(3, korisnik.getKorisnik_id());
+            ps = con.prepareStatement("UPDATE `customer` SET `name`=?, `surname`=? WHERE `customer_id`=?");
+            ps.setString(1, customer.getName());
+            ps.setString(2, customer.getSurname());
+            ps.setInt(3, customer.getCustomer_id());
             ps.executeUpdate();
 
-            AdresaDao.getInstance().update(korisnik.getAdresa(), con);
-            KontaktDao.getInstance().update(korisnik.getKontakt(), con);
+            AddressDao.getInstance().update(customer.getAddress(), con);
+            ContactDao.getInstance().update(customer.getContact(), con);
 
         } finally {
             ResourcesManager.closeResources(null, ps);
         }
     }
 
-    public void delete(Korisnik korisnik, Connection con) throws SQLException {
+    public void delete(Customer customer, Connection con) throws SQLException {
         PreparedStatement ps = null;
         try {
 
-            AranzmanDao.getInstance().delete(korisnik, con);
+            ArrangementDao.getInstance().delete(customer, con);
 
-            ps = con.prepareStatement("DELETE FROM `korisnik` WHERE `korisnik_id`=?");
-            ps.setInt(1, korisnik.getKorisnik_id());
+            ps = con.prepareStatement("DELETE FROM `customer` WHERE `customer_id`=?");
+            ps.setInt(1, customer.getCustomer_id());
             ps.executeUpdate();
 
-            AdresaDao.getInstance().delete(korisnik.getAdresa().getAdresa_id(), con);
-            KontaktDao.getInstance().delete(korisnik.getKontakt().getKontakt_id(), con);
+            AddressDao.getInstance().delete(customer.getAddress().getAddress_id(), con);
+            ContactDao.getInstance().delete(customer.getContact().getContact_id(), con);
 
         } finally {
             ResourcesManager.closeResources(null, ps);

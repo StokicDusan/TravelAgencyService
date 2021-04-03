@@ -1,7 +1,6 @@
 package com.etf.zadatak2.dao;
 
-import com.etf.zadatak2.data.Adresa;
-import com.etf.zadatak2.data.Korisnik;
+import com.etf.zadatak2.data.Address;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -10,29 +9,29 @@ import java.sql.Statement;
 
 /**
  *
- * @author Dušan Stokić 2013/0625
+ * @author Dušan Stokić
  */
-public class AdresaDao {
+public class AddressDao {
 
-    private static final AdresaDao instance = new AdresaDao();
+    private static final AddressDao instance = new AddressDao();
 
-    public AdresaDao() {
+    public AddressDao() {
     }
 
-    public static AdresaDao getInstance() {
+    public static AddressDao getInstance() {
         return instance;
     }
 
-    public int insert(Adresa adresa, Connection con) throws SQLException {
+    public int insert(Address address, Connection con) throws SQLException {
         PreparedStatement ps = null;
         ResultSet rs = null;
         int id = -1;
         try {
-            ps = con.prepareStatement("INSERT INTO `adresa`(`drzava`,`grad`,`ulica`,`broj`) VALUES(?,?,?,?)", Statement.RETURN_GENERATED_KEYS);
-            ps.setString(1, adresa.getDrzava());
-            ps.setString(2, adresa.getGrad());
-            ps.setString(3, adresa.getUlica());
-            ps.setInt(4, adresa.getBroj());
+            ps = con.prepareStatement("INSERT INTO `address`(`country`,`city`,`street`,`number`) VALUES(?,?,?,?)", Statement.RETURN_GENERATED_KEYS);
+            ps.setString(1, address.getCountry());
+            ps.setString(2, address.getCity());
+            ps.setString(3, address.getStreet());
+            ps.setInt(4, address.getNumber());
             ps.executeUpdate();
             rs = ps.getGeneratedKeys();
             rs.next();
@@ -43,43 +42,43 @@ public class AdresaDao {
         return id;
     }
 
-    public Adresa find(int adresa_id, Connection con) throws SQLException {
+    public Address find(int address_id, Connection con) throws SQLException {
         PreparedStatement ps = null;
         ResultSet rs = null;
-        Adresa adresa = null;
+        Address address = null;
         try {
-            ps = con.prepareStatement("SELECT * FROM `adresa` WHERE `adresa_id`=?");
-            ps.setInt(1, adresa_id);
+            ps = con.prepareStatement("SELECT * FROM `address` WHERE `address_id`=?");
+            ps.setInt(1, address_id);
             rs = ps.executeQuery();
             if (rs.next()) {
-                adresa = new Adresa(rs.getInt("adresa_id"), rs.getString("drzava"), rs.getString("grad"), rs.getString("ulica"), rs.getInt("broj"));
+                address = new Address(rs.getInt("address_id"), rs.getString("country"), rs.getString("city"), rs.getString("street"), rs.getInt("number"));
             }
         } finally {
             ResourcesManager.closeResources(rs, ps);
         }
-        return adresa;
+        return address;
     }
 
-    public void update(Adresa adresa, Connection con) throws SQLException {
+    public void update(Address address, Connection con) throws SQLException {
         PreparedStatement ps = null;
         try {
-            ps = con.prepareStatement("UPDATE `adresa` SET `drzava`=?, `grad`=?, `ulica`=?, `broj`=? WHERE `adresa_id`=?");
-            ps.setString(1, adresa.getDrzava());
-            ps.setString(2, adresa.getGrad());
-            ps.setString(3, adresa.getUlica());
-            ps.setInt(4, adresa.getBroj());
-            ps.setInt(5, adresa.getAdresa_id());
+            ps = con.prepareStatement("UPDATE `address` SET `country`=?, `city`=?, `street`=?, `number`=? WHERE `address_id`=?");
+            ps.setString(1, address.getCountry());
+            ps.setString(2, address.getCity());
+            ps.setString(3, address.getStreet());
+            ps.setInt(4, address.getNumber());
+            ps.setInt(5, address.getAddress_id());
             ps.executeUpdate();
         } finally {
             ResourcesManager.closeResources(null, ps);
         }
     }
 
-    public void delete(int adresa_id, Connection con) throws SQLException {
+    public void delete(int address_id, Connection con) throws SQLException {
         PreparedStatement ps = null;
         try {
-            ps = con.prepareStatement("DELETE FROM `adresa` WHERE `adresa_id`=?");
-            ps.setInt(1, adresa_id);
+            ps = con.prepareStatement("DELETE FROM `address` WHERE `address_id`=?");
+            ps.setInt(1, address_id);
             ps.executeUpdate();
         } finally {
             ResourcesManager.closeResources(null, ps);

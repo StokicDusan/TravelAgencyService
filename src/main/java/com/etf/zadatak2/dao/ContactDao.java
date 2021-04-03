@@ -1,6 +1,6 @@
 package com.etf.zadatak2.dao;
 
-import com.etf.zadatak2.data.Kontakt;
+import com.etf.zadatak2.data.Contact;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -9,27 +9,27 @@ import java.sql.Statement;
 
 /**
  *
- * @author Dušan Stokić 2013/0625
+ * @author Dušan Stokić
  */
-public class KontaktDao {
+public class ContactDao {
 
-    private static final KontaktDao instance = new KontaktDao();
+    private static final ContactDao instance = new ContactDao();
 
-    public KontaktDao() {
+    public ContactDao() {
     }
 
-    public static KontaktDao getInstance() {
+    public static ContactDao getInstance() {
         return instance;
     }
 
-    public int insert(Kontakt kontakt, Connection con) throws SQLException {
+    public int insert(Contact contact, Connection con) throws SQLException {
         PreparedStatement ps = null;
         ResultSet rs = null;
         int id = -1;
         try {
-            ps = con.prepareStatement("INSERT INTO `kontakt`(`telefon`,`email`) VALUES(?,?)", Statement.RETURN_GENERATED_KEYS);
-            ps.setString(1, kontakt.getTelefon());
-            ps.setString(2, kontakt.getEmail());
+            ps = con.prepareStatement("INSERT INTO `contact`(`telephone`,`email`) VALUES(?,?)", Statement.RETURN_GENERATED_KEYS);
+            ps.setString(1, contact.getTelephone());
+            ps.setString(2, contact.getEmail());
             ps.executeUpdate();
             rs = ps.getGeneratedKeys();
             rs.next();
@@ -40,41 +40,41 @@ public class KontaktDao {
         return id;
     }
 
-    public Kontakt find(int kontakt_id, Connection con) throws SQLException {
+    public Contact find(int contact_id, Connection con) throws SQLException {
         PreparedStatement ps = null;
         ResultSet rs = null;
-        Kontakt kontakt = null;
+        Contact contact = null;
         try {
-            ps = con.prepareStatement("SELECT * FROM `kontakt` WHERE `kontakt_id`=?");
-            ps.setInt(1, kontakt_id);
+            ps = con.prepareStatement("SELECT * FROM `contact` WHERE `contact_id`=?");
+            ps.setInt(1, contact_id);
             rs = ps.executeQuery();
             if (rs.next()) {
-                kontakt = new Kontakt(rs.getInt("kontakt_id"), rs.getString("telefon"), rs.getString("email"));
+                contact = new Contact(rs.getInt("contact_id"), rs.getString("telephone"), rs.getString("email"));
             }
         } finally {
             ResourcesManager.closeResources(rs, ps);
         }
-        return kontakt;
+        return contact;
     }
 
-    public void update(Kontakt kontakt, Connection con) throws SQLException {
+    public void update(Contact contact, Connection con) throws SQLException {
         PreparedStatement ps = null;
         try {
-            ps = con.prepareStatement("UPDATE `kontakt` SET `telefon`=?, `email`=? WHERE `kontakt_id`=?");
-            ps.setString(1, kontakt.getTelefon());
-            ps.setString(2, kontakt.getEmail());
-            ps.setInt(3, kontakt.getKontakt_id());
+            ps = con.prepareStatement("UPDATE `contact` SET `telephone`=?, `email`=? WHERE `contact_id`=?");
+            ps.setString(1, contact.getTelephone());
+            ps.setString(2, contact.getEmail());
+            ps.setInt(3, contact.getContact_id());
             ps.executeUpdate();
         } finally {
             ResourcesManager.closeResources(null, ps);
         }
     }
 
-    public void delete(int kontakt_id, Connection con) throws SQLException {
+    public void delete(int contact_id, Connection con) throws SQLException {
         PreparedStatement ps = null;
         try {
-            ps = con.prepareStatement("DELETE FROM `kontakt` WHERE `kontakt_id`=?");
-            ps.setInt(1, kontakt_id);
+            ps = con.prepareStatement("DELETE FROM `contact` WHERE `contact_id`=?");
+            ps.setInt(1, contact_id);
             ps.executeUpdate();
         } finally {
             ResourcesManager.closeResources(null, ps);

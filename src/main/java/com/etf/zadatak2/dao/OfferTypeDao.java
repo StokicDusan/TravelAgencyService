@@ -1,7 +1,7 @@
 package com.etf.zadatak2.dao;
 
-import com.etf.zadatak2.data.Ponuda;
-import com.etf.zadatak2.data.PonudaVrsta;
+import com.etf.zadatak2.data.Offer;
+import com.etf.zadatak2.data.OfferType;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -12,26 +12,26 @@ import java.util.List;
 
 /**
  *
- * @author Dušan Stokić 2013/0625
+ * @author Dušan Stokić
  */
-public class PonudaVrstaDao {
+public class OfferTypeDao {
 
-    private static final PonudaVrstaDao instance = new PonudaVrstaDao();
+    private static final OfferTypeDao instance = new OfferTypeDao();
 
-    public PonudaVrstaDao() {
+    public OfferTypeDao() {
     }
 
-    public static PonudaVrstaDao getInstance() {
+    public static OfferTypeDao getInstance() {
         return instance;
     }
 
-    public int insert(PonudaVrsta ponuda_vrsta, Connection con) throws SQLException {
+    public int insert(OfferType offer_type, Connection con) throws SQLException {
         PreparedStatement ps = null;
         ResultSet rs = null;
         int id = -1;
         try {
-            ps = con.prepareStatement("INSERT INTO `ponuda_vrsta`(`naziv`) VALUES(?)", Statement.RETURN_GENERATED_KEYS);
-            ps.setString(1, ponuda_vrsta.getNaziv());
+            ps = con.prepareStatement("INSERT INTO `offer_type`(`name`) VALUES(?)", Statement.RETURN_GENERATED_KEYS);
+            ps.setString(1, offer_type.getName());
             ps.executeUpdate();
             rs = ps.getGeneratedKeys();
             rs.next();
@@ -42,84 +42,84 @@ public class PonudaVrstaDao {
         return id;
     }
 
-    public PonudaVrsta find(int ponuda_vrsta_id, Connection con) throws SQLException {
+    public OfferType find(int offer_type_id, Connection con) throws SQLException {
         PreparedStatement ps = null;
         ResultSet rs = null;
-        PonudaVrsta ponuda_vrsta = null;
+        OfferType offer_type = null;
         try {
-            ps = con.prepareStatement("SELECT * FROM `ponuda_vrsta` WHERE `ponuda_vrsta_id`=?");
-            ps.setInt(1, ponuda_vrsta_id);
+            ps = con.prepareStatement("SELECT * FROM `offer_type` WHERE `offer_type_id`=?");
+            ps.setInt(1, offer_type_id);
             rs = ps.executeQuery();
             if (rs.next()) {
-                ponuda_vrsta = new PonudaVrsta(rs.getInt("ponuda_vrsta_id"), rs.getString("naziv"));
+                offer_type = new OfferType(rs.getInt("offer_type_id"), rs.getString("name"));
             }
         } finally {
             ResourcesManager.closeResources(rs, ps);
         }
-        return ponuda_vrsta;
+        return offer_type;
     }
 
-    public PonudaVrsta find(String naziv, Connection con) throws SQLException {
+    public OfferType find(String name, Connection con) throws SQLException {
         PreparedStatement ps = null;
         ResultSet rs = null;
-        PonudaVrsta ponuda_vrsta = null;
+        OfferType offer_type = null;
         try {
-            ps = con.prepareStatement("SELECT * FROM `ponuda_vrsta` WHERE `naziv`=?");
-            ps.setString(1, naziv);
+            ps = con.prepareStatement("SELECT * FROM `offer_type` WHERE `name`=?");
+            ps.setString(1, name);
             rs = ps.executeQuery();
             if (rs.next()) {
-                ponuda_vrsta = new PonudaVrsta(rs.getInt("ponuda_vrsta_id"), rs.getString("naziv"));
+                offer_type = new OfferType(rs.getInt("offer_type_id"), rs.getString("name"));
             }
         } finally {
             ResourcesManager.closeResources(rs, ps);
         }
-        return ponuda_vrsta;
+        return offer_type;
     }
 
-    public List<PonudaVrsta> findAll(Connection con) throws SQLException {
+    public List<OfferType> findAll(Connection con) throws SQLException {
         PreparedStatement ps = null;
         ResultSet rs = null;
-        List<PonudaVrsta> listPonudaVrsta = new ArrayList<>();
+        List<OfferType> listOfferType = new ArrayList<>();
         try {
-            ps = con.prepareStatement("SELECT * FROM `ponuda_vrsta` ORDER BY `naziv` ASC");
+            ps = con.prepareStatement("SELECT * FROM `offer_type` ORDER BY `name` ASC");
             rs = ps.executeQuery();
             while (rs.next()) {
-                PonudaVrsta ponuda_vrsta = new PonudaVrsta(rs.getInt("ponuda_vrsta_id"), rs.getString("naziv"));
-                listPonudaVrsta.add(ponuda_vrsta);
+                OfferType offer_type = new OfferType(rs.getInt("offer_type_id"), rs.getString("name"));
+                listOfferType.add(offer_type);
             }
         } finally {
             ResourcesManager.closeResources(rs, ps);
         }
-        return listPonudaVrsta;
+        return listOfferType;
     }
 
-    public void update(PonudaVrsta ponuda_vrsta, Connection con) throws SQLException {
+    public void update(OfferType offer_type, Connection con) throws SQLException {
         PreparedStatement ps = null;
         try {
-            ps = con.prepareStatement("UPDATE `ponuda_vrsta` SET `naziv`=? WHERE `ponuda_vrsta_id`=?");
-            ps.setString(1, ponuda_vrsta.getNaziv());
-            ps.setInt(2, ponuda_vrsta.getPonuda_vrsta_id());
+            ps = con.prepareStatement("UPDATE `offer_type` SET `name`=? WHERE `offer_type_id`=?");
+            ps.setString(1, offer_type.getName());
+            ps.setInt(2, offer_type.getOffer_type_id());
             ps.executeUpdate();
         } finally {
             ResourcesManager.closeResources(null, ps);
         }
     }
 
-    public void delete(int ponuda_vrsta_id, Connection con) throws SQLException {
+    public void delete(int offer_type_id, Connection con) throws SQLException {
         PreparedStatement ps = null;
         try {
-            PonudaVrsta ponudaVrsta = PonudaVrstaDao.getInstance().find(ponuda_vrsta_id, con);
-            List<Ponuda> ponudaList = PonudaDao.getInstance().findAllByPonudaVrsta(ponudaVrsta, con);
+            OfferType offerType = OfferTypeDao.getInstance().find(offer_type_id, con);
+            List<Offer> offerList = OfferDao.getInstance().findAllByOfferType(offerType, con);
 
             /*
-            Brisanje svih ponuda po toj vrsti ponude
+            delete every offer with the given offer type
              */
-            for (Ponuda temp : ponudaList) {
-                PonudaDao.getInstance().delete(temp, con);
+            for (Offer temp : offerList) {
+                OfferDao.getInstance().delete(temp, con);
             }
 
-            ps = con.prepareStatement("DELETE FROM `ponuda_vrsta` WHERE `ponuda_vrsta_id`=?");
-            ps.setInt(1, ponuda_vrsta_id);
+            ps = con.prepareStatement("DELETE FROM `offer_type` WHERE `offer_type_id`=?");
+            ps.setInt(1, offer_type_id);
             ps.executeUpdate();
         } finally {
             ResourcesManager.closeResources(null, ps);
