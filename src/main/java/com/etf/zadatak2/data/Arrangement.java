@@ -53,7 +53,7 @@ public class Arrangement implements Serializable {
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
-        sb.append("Aranzman{arrangement_id=").append(arrangement_id);
+        sb.append("Arrangement{arrangement_id=").append(arrangement_id);
         sb.append(", customer=").append(customer);
         sb.append(", offer=").append(offer);
         sb.append('}');
