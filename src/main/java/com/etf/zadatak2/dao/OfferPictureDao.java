@@ -68,7 +68,7 @@ public class OfferPictureDao {
         return offer_picture;
     }
 
-    public List<OfferPicture> findAlOfferPictureByOfferId(int offer_id, Connection con) throws SQLException {
+    public List<OfferPicture> findAllOfferPictureByOfferId(int offer_id, Connection con) throws SQLException {
         PreparedStatement ps = null;
         ResultSet rs = null;
         List<OfferPicture> offerPictureList = new ArrayList<>();
