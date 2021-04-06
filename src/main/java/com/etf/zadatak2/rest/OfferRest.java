@@ -1,10 +1,10 @@
 package com.etf.zadatak2.rest;
 
-import com.etf.zadatak2.data.Ponuda;
-import com.etf.zadatak2.data.PonudaSlika;
-import com.etf.zadatak2.data.PonudaVrsta;
-import com.etf.zadatak2.exception.Zadatak2Exception;
-import com.etf.zadatak2.sevice.PonudaService;
+import com.etf.zadatak2.data.Offer;
+import com.etf.zadatak2.data.OfferPicture;
+import com.etf.zadatak2.data.OfferType;
+import com.etf.zadatak2.exception.AgencyException;
+import com.etf.zadatak2.sevice.OfferService;
 import java.util.List;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
@@ -17,164 +17,156 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
-@Path("ponuda")
-public class PonudaRest {
+@Path("offer")
+public class OfferRest {
 
-    private final PonudaService ponudaService = PonudaService.getInstance();
-
-    /*
-    Deo vezan za ponudu
-     */
-    @GET
-    @Path("/{ponuda_id}")
-    @Produces(MediaType.APPLICATION_JSON)
-    public Ponuda getPonudaById(@PathParam("ponuda_id") int ponuda_id) throws Zadatak2Exception {
-        return ponudaService.findPonuda(ponuda_id);
-    }
-
-    @GET
-    @Path("/drzava/{drzava}")
-    @Produces(MediaType.APPLICATION_JSON)
-    public List<Ponuda> getPonudaByDrzava(@PathParam("drzava") String drzava) throws Zadatak2Exception {
-        return ponudaService.findPonudaDrzava(drzava, null);
-    }
-
-    @GET
-    @Path("/drzava/{drzava}/{opis}")
-    @Produces(MediaType.APPLICATION_JSON)
-    public List<Ponuda> getPonudaByDrzava(@PathParam("drzava") String drzava, @PathParam("opis") String opis) throws Zadatak2Exception {
-        return ponudaService.findPonudaDrzava(drzava, opis);
-    }
-
-    @GET
-    @Path("/mesto/{mesto}")
-    @Produces(MediaType.APPLICATION_JSON)
-    public List<Ponuda> getPonudaByMesto(@PathParam("mesto") String mesto) throws Zadatak2Exception {
-        return ponudaService.findPonudaMesto(mesto);
-    }
+    private final OfferService offerService = OfferService.getInstance();
 
     /*
-    @GET
-    @Path("/opis/{opis}")
-    @Produces(MediaType.APPLICATION_JSON)
-    public Ponuda getPonudaByOpis(@PathParam("opis") String opis) throws Zadatak2Exception {
-        return ponudaService.findPonudaOpis(opis);
-    }
+    Part related to Offer
      */
     @GET
-    @Path("/vrsta_ponude/{vrsta}")
+    @Path("/{offer_id}")
     @Produces(MediaType.APPLICATION_JSON)
-    public List<Ponuda> getPonudaByVrsta(@PathParam("vrsta") String vrsta) throws Zadatak2Exception {
-        return ponudaService.findPonudaVrsta(vrsta);
+    public Offer getOfferById(@PathParam("offer_id") int offer_id) throws AgencyException {
+        return offerService.findOffer(offer_id);
+    }
+
+    @GET
+    @Path("/country/{country}")
+    @Produces(MediaType.APPLICATION_JSON)
+    public List<Offer> getOfferByCountry(@PathParam("country") String country) throws AgencyException {
+        return offerService.findOfferCountry(country, null);
+    }
+
+    @GET
+    @Path("/country/{country}/{description}")
+    @Produces(MediaType.APPLICATION_JSON)
+    public List<Offer> getOfferByCountry(@PathParam("country") String country, @PathParam("description") String description) throws AgencyException {
+        return offerService.findOfferCountry(country, description);
+    }
+
+    @GET
+    @Path("/location/{location}")
+    @Produces(MediaType.APPLICATION_JSON)
+    public List<Offer> getOfferByLocation(@PathParam("location") String location) throws AgencyException {
+        return offerService.findOfferLocation(location);
+    }
+
+    @GET
+    @Path("/type_of_offer/{type}")
+    @Produces(MediaType.APPLICATION_JSON)
+    public List<Offer> getOfferByVrsta(@PathParam("type") String type) throws AgencyException {
+        return offerService.findOfferType(type);
     }
 
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public Response addPonuda(Ponuda ponuda) throws Zadatak2Exception {
-        ponudaService.addNewPonuda(ponuda);
+    public Response addOffer(Offer offer) throws AgencyException {
+        offerService.addNewOffer(offer);
         return Response.ok().build();
     }
 
     @PUT
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public Response updatePonuda(Ponuda ponuda) throws Zadatak2Exception {
-        ponudaService.updatePonuda(ponuda);
+    public Response updateOffer(Offer offer) throws AgencyException {
+        offerService.updateOffer(offer);
         return Response.ok().build();
     }
 
     @DELETE
-    @Path("/{ponuda_id}")
+    @Path("/{offer_id}")
     @Produces(MediaType.APPLICATION_JSON)
-    public Response deletePonuda(@PathParam("ponuda_id") int ponuda_id) throws Zadatak2Exception {
-        ponudaService.deletePonuda(ponuda_id);
+    public Response deleteOffer(@PathParam("offer_id") int offer_id) throws AgencyException {
+        offerService.deleteOffer(offer_id);
         return Response.ok().build();
     }
 
     /*
-    Deo vezan za vrstu ponude
+    Part related to Offer Type
      */
     @GET
-    @Path("/vrsta/{vrsta_id}")
+    @Path("/type/{type_id}")
     @Produces(MediaType.APPLICATION_JSON)
-    public PonudaVrsta getPonudaVrstaById(@PathParam("vrsta_id") int ponuda_vrsta_id) throws Zadatak2Exception {
-        return ponudaService.findPonudaVrsta(ponuda_vrsta_id);
+    public OfferType getOfferTypeById(@PathParam("type_id") int offer_type_id) throws AgencyException {
+        return offerService.findOfferType(offer_type_id);
     }
 
     @GET
-    @Path("/vrsta")
+    @Path("/type")
     @Produces(MediaType.APPLICATION_JSON)
-    public List<PonudaVrsta> getPonudaVrsta() throws Zadatak2Exception {
-        return ponudaService.findAllPonudaVrsta();
+    public List<OfferType> getOfferType() throws AgencyException {
+        return offerService.findAllOfferType();
     }
 
     @POST
-    @Path("/vrsta")
+    @Path("/type")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public Response addPonudaVrsta(PonudaVrsta ponudaVrsta) throws Zadatak2Exception {
-        ponudaService.addNewPonudaVrsta(ponudaVrsta);
+    public Response addOfferType(OfferType offerType) throws AgencyException {
+        offerService.addNewOfferType(offerType);
         return Response.ok().build();
     }
 
     @PUT
-    @Path("/vrsta")
+    @Path("/type")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public Response updatePonudaVrsta(PonudaVrsta ponudaVrsta) throws Zadatak2Exception {
-        ponudaService.updatePonudaVrsta(ponudaVrsta);
+    public Response updateOfferType(OfferType offerType) throws AgencyException {
+        offerService.updateOfferType(offerType);
         return Response.ok().build();
     }
 
     @DELETE
-    @Path("/vrsta/{vrsta_id}")
+    @Path("/type/{type_id}")
     @Produces(MediaType.APPLICATION_JSON)
-    public Response deletePonudaVrsta(@PathParam("vrsta_id") int ponuda_vrsta_id) throws Zadatak2Exception {
-        ponudaService.deletePonudaVrsta(ponuda_vrsta_id);
+    public Response deleteOfferType(@PathParam("type_id") int offer_type_id) throws AgencyException {
+        offerService.deleteOfferType(offer_type_id);
         return Response.ok().build();
     }
 
     /*
-    Deo vezan za sliku ponude
+    Part related to Offer Picture
      */
     @GET
-    @Path("/slika/{slika_id}")
+    @Path("/picture/{picture_id}")
     @Produces(MediaType.APPLICATION_JSON)
-    public PonudaSlika getPonudaSlikaById(@PathParam("slika_id") int ponuda_slika_id) throws Zadatak2Exception {
-        return ponudaService.findPonudaSlika(ponuda_slika_id);
+    public OfferPicture getOfferPictureById(@PathParam("picture_id") int offer_picture_id) throws AgencyException {
+        return offerService.findOfferPicture(offer_picture_id);
     }
 
     @GET
-    @Path("/slika/ponuda/{ponuda_id}")
+    @Path("/picture/offer/{offer_id}")
     @Produces(MediaType.APPLICATION_JSON)
-    public List<PonudaSlika> getPonudaSlikaByPonudaId(@PathParam("ponuda_id") int ponuda_id) throws Zadatak2Exception {
-        return ponudaService.findAllPonudaSlika(ponuda_id);
+    public List<OfferPicture> getOfferPictureByOfferId(@PathParam("offer_id") int offer_id) throws AgencyException {
+        return offerService.findAllOfferPicture(offer_id);
     }
 
     @POST
-    @Path("/slika")
+    @Path("/picture")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public Response addPonudaSlika(PonudaSlika ponudaSlika) throws Zadatak2Exception {
-        ponudaService.addNewPonudaSlika(ponudaSlika);
+    public Response addOfferPicture(OfferPicture offerPicture) throws AgencyException {
+        offerService.addNewOfferPicture(offerPicture);
         return Response.ok().build();
     }
 
     @PUT
-    @Path("/slika")
+    @Path("/picture")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public Response updatePonudaSlika(PonudaSlika ponudaSlika) throws Zadatak2Exception {
-        ponudaService.updatePonudaSlika(ponudaSlika);
+    public Response updateOfferPicture(OfferPicture offerPicture) throws AgencyException {
+        offerService.updateOfferPicture(offerPicture);
         return Response.ok().build();
     }
 
     @DELETE
-    @Path("/slika/{slika_id}")
+    @Path("/picture/{picture_id}")
     @Produces(MediaType.APPLICATION_JSON)
-    public Response deletePonudaSlika(@PathParam("slika_id") int ponuda_slika_id) throws Zadatak2Exception {
-        ponudaService.deletePonudaSlika(ponuda_slika_id);
+    public Response deleteOfferPicture(@PathParam("picture_id") int offer_picture_id) throws AgencyException {
+        offerService.deleteOfferPicture(offer_picture_id);
         return Response.ok().build();
     }
 }
