@@ -1,245 +1,251 @@
 package com.etf.zadatak2.sevice;
 
-import com.etf.zadatak2.dao.AdresaDao;
-import com.etf.zadatak2.dao.KontaktDao;
-import com.etf.zadatak2.dao.KorisnikDao;
+import com.etf.zadatak2.dao.AddressDao;
+import com.etf.zadatak2.dao.ContactDao;
+import com.etf.zadatak2.dao.CustomerDao;
 import com.etf.zadatak2.dao.ResourcesManager;
-import com.etf.zadatak2.data.Adresa;
-import com.etf.zadatak2.data.Kontakt;
-import com.etf.zadatak2.data.Korisnik;
-import com.etf.zadatak2.exception.Zadatak2Exception;
+import com.etf.zadatak2.data.Address;
+import com.etf.zadatak2.data.Contact;
+import com.etf.zadatak2.data.Customer;
+import com.etf.zadatak2.exception.AgencyException;
 import java.sql.Connection;
 import java.sql.SQLException;
 
 /**
  *
- * @author Dušan Stokić 2013/0625
+ * @author Dušan Stokić
  */
-public class KorisnikService {
+public class CustomerService {
 
-    private static final KorisnikService instance = new KorisnikService();
+    private static final CustomerService instance = new CustomerService();
 
-    public KorisnikService() {
+    public CustomerService() {
     }
 
-    public static KorisnikService getInstance() {
+    public static CustomerService getInstance() {
         return instance;
     }
 
     /*
-    Deo vezan za Korisnika
+    Part related to Customer
      */
-    public void addNewKorisnik(Korisnik korisnik) throws Zadatak2Exception {
+    public void addNewCustomer(Customer customer) throws AgencyException {
         Connection con = null;
         try {
             con = ResourcesManager.getConnection();
 
             con.setAutoCommit(false);
 
-            KorisnikDao.getInstance().insert(korisnik, con);
+            CustomerDao.getInstance().insert(customer, con);
 
             con.commit();
         } catch (SQLException ex) {
             ResourcesManager.rollbackTransactions(con);
-            throw new Zadatak2Exception("Neusešno dodavanje korisnika " + korisnik, ex);
+            throw new AgencyException("Error adding customer" + customer, ex);
         } finally {
             ResourcesManager.closeConnection(con);
         }
     }
 
-    public Korisnik findKorisnik(int korisnik_id) throws Zadatak2Exception {
+    public Customer findCustomer(int customer_id) throws AgencyException {
         Connection con = null;
         try {
             con = ResourcesManager.getConnection();
 
-            return KorisnikDao.getInstance().find(korisnik_id, con);
+            return CustomerDao.getInstance().find(customer_id, con);
 
         } catch (SQLException ex) {
-            throw new Zadatak2Exception("Ne postoji korisik sa id-jem " + korisnik_id, ex);
+            throw new AgencyException("Customer with id: " + customer_id +" does not exist", ex);
         } finally {
             ResourcesManager.closeConnection(con);
         }
     }
 
-    public void updateKorisnik(Korisnik korisnik) throws Zadatak2Exception {
+    public void updateCustomer(Customer customer) throws AgencyException {
         Connection con = null;
         try {
             con = ResourcesManager.getConnection();
             con.setAutoCommit(false);
 
-            KorisnikDao.getInstance().update(korisnik, con);
+            CustomerDao.getInstance().update(customer, con);
 
             con.commit();
         } catch (SQLException ex) {
             ResourcesManager.rollbackTransactions(con);
-            throw new Zadatak2Exception("Neuspešno ažuriranje korisnika " + korisnik, ex);
+            throw new AgencyException("Error updating customer " + customer, ex);
         } finally {
             ResourcesManager.closeConnection(con);
         }
     }
 
-    public void deleteKorisnik(int korisnik_id) throws Zadatak2Exception {
+    public void deleteCustomer(int customer_id) throws AgencyException {
         Connection con = null;
         try {
             con = ResourcesManager.getConnection();
             con.setAutoCommit(false);
 
-            Korisnik korisnik = KorisnikDao.getInstance().find(korisnik_id, con);
-            if (korisnik != null) {
-                KorisnikDao.getInstance().delete(korisnik, con);
+            Customer customer = CustomerDao.getInstance().find(customer_id, con);
+            if (customer != null) {
+                CustomerDao.getInstance().delete(customer, con);
             }
             con.commit();
         } catch (SQLException ex) {
             ResourcesManager.rollbackTransactions(con);
-            throw new Zadatak2Exception("Neuspešno brisanje korisnika da id-jem " + korisnik_id, ex);
+            throw new AgencyException("Error deleting customer " + customer_id, ex);
         } finally {
             ResourcesManager.closeConnection(con);
         }
     }
 
     /*
-    Deo vezan za adresu
+    Part related to Address
      */
-    public void addNewAdresa(Adresa adresa) throws Zadatak2Exception {
+    public void addNewAddress(Address address) throws AgencyException {
         Connection con = null;
         try {
             con = ResourcesManager.getConnection();
 
             con.setAutoCommit(false);
 
-            AdresaDao.getInstance().insert(adresa, con);
+            AddressDao.getInstance().insert(address, con);
 
             con.commit();
         } catch (SQLException ex) {
             ResourcesManager.rollbackTransactions(con);
-            throw new Zadatak2Exception("Neusešno dodavanje adrese " + adresa, ex);
+            throw new AgencyException("Error adding address " + address, ex);
         } finally {
             ResourcesManager.closeConnection(con);
         }
     }
 
-    public Adresa findAdresa(int adresa_id) throws Zadatak2Exception {
+    public Address findAddress(int address_id) throws AgencyException {
         Connection con = null;
         try {
             con = ResourcesManager.getConnection();
 
-            return AdresaDao.getInstance().find(adresa_id, con);
+            return AddressDao.getInstance().find(address_id, con);
 
         } catch (SQLException ex) {
-            throw new Zadatak2Exception("Ne postoji adresa sa id-jem " + adresa_id, ex);
+            throw new AgencyException("Error finding address " + address_id, ex);
         } finally {
             ResourcesManager.closeConnection(con);
         }
     }
 
-    public void updateAdresa(Adresa adresa) throws Zadatak2Exception {
+    public void updateAddress(Address address) throws AgencyException {
         Connection con = null;
         try {
             con = ResourcesManager.getConnection();
             con.setAutoCommit(false);
 
-            AdresaDao.getInstance().update(adresa, con);
+            AddressDao.getInstance().update(address, con);
 
             con.commit();
         } catch (SQLException ex) {
             ResourcesManager.rollbackTransactions(con);
-            throw new Zadatak2Exception("Neuspešno ažuriranje adrese " + adresa, ex);
+            throw new AgencyException("Error updating address " + address, ex);
         } finally {
             ResourcesManager.closeConnection(con);
         }
     }
-
-    public void deleteAdresa(int adresa_id) throws Zadatak2Exception {
+    /*
+    Deleting addresss deletes customers
+    on that address if they exist
+    */
+    public void deleteAddress(int address_id) throws AgencyException {
         Connection con = null;
         try {
             con = ResourcesManager.getConnection();
             con.setAutoCommit(false);
 
-            Adresa adresa = AdresaDao.getInstance().find(adresa_id, con);
-            Korisnik korisnik = KorisnikDao.getInstance().find(adresa, con);
-            if (korisnik != null) {
-                KorisnikDao.getInstance().delete(korisnik, con);
+            Address address = AddressDao.getInstance().find(address_id, con);
+            Customer customer = CustomerDao.getInstance().find(address, con);
+            if (customer != null) {
+                CustomerDao.getInstance().delete(customer, con);
             } else {
-                AdresaDao.getInstance().delete(adresa_id, con);
+                AddressDao.getInstance().delete(address_id, con);
             }
             con.commit();
         } catch (SQLException ex) {
             ResourcesManager.rollbackTransactions(con);
-            throw new Zadatak2Exception("Neuspešno brisanje korisnika ", ex);
+            throw new AgencyException("Error deleting address ", ex);
         } finally {
             ResourcesManager.closeConnection(con);
         }
     }
 
     /*
-    Deo vezan za kontakt
+    Part related to Contact
      */
-    public void addNewKontakt(Kontakt kontakt) throws Zadatak2Exception {
+    public void addNewContact(Contact contact) throws AgencyException {
         Connection con = null;
         try {
             con = ResourcesManager.getConnection();
 
             con.setAutoCommit(false);
 
-            KontaktDao.getInstance().insert(kontakt, con);
+            ContactDao.getInstance().insert(contact, con);
 
             con.commit();
         } catch (SQLException ex) {
             ResourcesManager.rollbackTransactions(con);
-            throw new Zadatak2Exception("Neusešno dodavanje kontakta " + kontakt, ex);
+            throw new AgencyException("Error adding contact " + contact, ex);
         } finally {
             ResourcesManager.closeConnection(con);
         }
     }
 
-    public Kontakt findKontkat(int kontakt_id) throws Zadatak2Exception {
+    public Contact findContact(int contact_id) throws AgencyException {
         Connection con = null;
         try {
             con = ResourcesManager.getConnection();
 
-            return KontaktDao.getInstance().find(kontakt_id, con);
+            return ContactDao.getInstance().find(contact_id, con);
 
         } catch (SQLException ex) {
-            throw new Zadatak2Exception("Ne postoji kontakt sa id-jem " + kontakt_id, ex);
+            throw new AgencyException("Error finding contact with id: " + contact_id, ex);
         } finally {
             ResourcesManager.closeConnection(con);
         }
     }
 
-    public void updateKontakt(Kontakt kontakt) throws Zadatak2Exception {
+    public void updateContact(Contact contact) throws AgencyException {
         Connection con = null;
         try {
             con = ResourcesManager.getConnection();
             con.setAutoCommit(false);
 
-            KontaktDao.getInstance().update(kontakt, con);
+            ContactDao.getInstance().update(contact, con);
 
             con.commit();
         } catch (SQLException ex) {
             ResourcesManager.rollbackTransactions(con);
-            throw new Zadatak2Exception("Neuspešno ažuriranje kontakt " + kontakt, ex);
+            throw new AgencyException("Error updating contact " + contact, ex);
         } finally {
             ResourcesManager.closeConnection(con);
         }
     }
-
-    public void deleteKontakt(int kontakt_id) throws Zadatak2Exception ,SQLException{
+   /*
+    Deleting contacts deletes customers
+    with that contact if they exist
+    */
+    public void deleteContact(int contact_id) throws AgencyException ,SQLException{
         Connection con = null;
         try {
             con = ResourcesManager.getConnection();
             con.setAutoCommit(false);
 
-            Kontakt kontakt = KontaktDao.getInstance().find(kontakt_id, con);
-            Korisnik korisnik = KorisnikDao.getInstance().find(kontakt, con);
-            if (korisnik != null) {
-                KorisnikDao.getInstance().delete(korisnik, con);
+            Contact contact = ContactDao.getInstance().find(contact_id, con);
+            Customer customer = CustomerDao.getInstance().find(contact, con);
+            if (customer != null) {
+                CustomerDao.getInstance().delete(customer, con);
             } else {
-                KontaktDao.getInstance().delete(kontakt_id, con);
+                ContactDao.getInstance().delete(contact_id, con);
             }
             con.commit();
         } catch (SQLException ex) {
             ResourcesManager.rollbackTransactions(con);
-            throw new Zadatak2Exception("Neuspešno brisanje korisnika ", ex);
+            throw new AgencyException("Error deleting contact ", ex);
         } finally {
             ResourcesManager.closeConnection(con);
         }

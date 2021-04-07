@@ -1,327 +1,312 @@
 package com.etf.zadatak2.sevice;
 
-import com.etf.zadatak2.dao.PonudaDao;
-import com.etf.zadatak2.dao.PonudaSlikaDao;
-import com.etf.zadatak2.dao.PonudaVrstaDao;
+import com.etf.zadatak2.dao.OfferDao;
+import com.etf.zadatak2.dao.OfferPictureDao;
+import com.etf.zadatak2.dao.OfferTypeDao;
 import com.etf.zadatak2.dao.ResourcesManager;
-import com.etf.zadatak2.data.Ponuda;
-import com.etf.zadatak2.data.PonudaSlika;
-import com.etf.zadatak2.data.PonudaVrsta;
-import com.etf.zadatak2.exception.Zadatak2Exception;
+import com.etf.zadatak2.data.Offer;
+import com.etf.zadatak2.data.OfferPicture;
+import com.etf.zadatak2.data.OfferType;
+import com.etf.zadatak2.exception.AgencyException;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.List;
 
 /**
  *
- * @author Dušan Stokić 2013/0625
+ * @author Dušan Stokić
  */
-public class PonudaService {
+public class OfferService {
 
-    private static final PonudaService instance = new PonudaService();
+    private static final OfferService instance = new OfferService();
 
-    public PonudaService() {
+    public OfferService() {
     }
 
-    public static PonudaService getInstance() {
+    public static OfferService getInstance() {
         return instance;
     }
 
     /*
-    Deo vezan za Ponudu
+    Part related to Offer
      */
-    public int addNewPonuda(Ponuda ponuda) throws Zadatak2Exception {
+    public int addNewOffer(Offer offer) throws AgencyException {
         Connection con = null;
         try {
             con = ResourcesManager.getConnection();
 
-            return PonudaDao.getInstance().insert(ponuda, con);
+            return OfferDao.getInstance().insert(offer, con);
         } catch (SQLException ex) {
-            throw new Zadatak2Exception("Neuspešno dodavanje ponude " + ponuda, ex);
+            throw new AgencyException("Error adding offer " + offer, ex);
         } finally {
             ResourcesManager.closeConnection(con);
         }
     }
 
-    public Ponuda findPonuda(int ponuda_id) throws Zadatak2Exception {
+    public Offer findOffer(int offer_id) throws AgencyException {
         Connection con = null;
         try {
             con = ResourcesManager.getConnection();
 
-            return PonudaDao.getInstance().find(ponuda_id, con);
+            return OfferDao.getInstance().find(offer_id, con);
 
         } catch (SQLException ex) {
-            throw new Zadatak2Exception("Ne postoji ponuda " + ponuda_id, ex);
+            throw new AgencyException("Offer with id: " + offer_id +" does not exist", ex);
         } finally {
             ResourcesManager.closeConnection(con);
         }
     }
 
-    public List<Ponuda> findPonudaDrzava(String drzava, String opis) throws Zadatak2Exception {
+    public List<Offer> findOfferCountry(String country, String description) throws AgencyException {
         Connection con = null;
         try {
             con = ResourcesManager.getConnection();
 
-            return PonudaDao.getInstance().findAllByDrzava(drzava, opis, con);
+            return OfferDao.getInstance().findAllByCountry(country, description, con);
 
         } catch (SQLException ex) {
-            throw new Zadatak2Exception("Ne postoje ponude u drzavi " + drzava, ex);
+            throw new AgencyException("Error finding offer in country " + country, ex);
         } finally {
             ResourcesManager.closeConnection(con);
         }
     }
 
-    public List<Ponuda> findPonudaVrsta(String vrsta) throws Zadatak2Exception {
+    public List<Offer> findOfferType(String type) throws AgencyException {
         Connection con = null;
         try {
             con = ResourcesManager.getConnection();
 
-            PonudaVrsta ponuda_vrsta = PonudaVrstaDao.getInstance().find(vrsta, con);
-            return PonudaDao.getInstance().findAllByPonudaVrsta(ponuda_vrsta, con);
+            OfferType offer_type = OfferTypeDao.getInstance().find(type, con);
+            return OfferDao.getInstance().findAllByOfferType(offer_type, con);
 
         } catch (SQLException ex) {
             ResourcesManager.rollbackTransactions(con);
-            throw new Zadatak2Exception("Ne postoje vrste ponuda " + vrsta, ex);
+            throw new AgencyException("Error finding offer type " + type, ex);
         } finally {
             ResourcesManager.closeConnection(con);
         }
     }
 
-    public List<Ponuda> findPonudaMesto(String mesto) throws Zadatak2Exception {
+    public List<Offer> findOfferLocation(String location) throws AgencyException {
         Connection con = null;
         try {
             con = ResourcesManager.getConnection();
 
-            return PonudaDao.getInstance().findAllByMesto(mesto, con);
+            return OfferDao.getInstance().findAllByLocation(location, con);
 
         } catch (SQLException ex) {
-            throw new Zadatak2Exception("Ne postoji ponuda u mestu " + mesto, ex);
+            throw new AgencyException("Error finding offer on location " + location, ex);
+        } finally {
+            ResourcesManager.closeConnection(con);
+        }
+    }
+
+    public List<Offer> findAllOffer() throws AgencyException {
+        Connection con = null;
+        try {
+            con = ResourcesManager.getConnection();
+            return OfferDao.getInstance().findAll(con);
+        } catch (SQLException ex) {
+            throw new AgencyException("Error finding offers ", ex);
+        } finally {
+            ResourcesManager.closeConnection(con);
+        }
+    }
+
+    public void updateOffer(Offer offer) throws AgencyException {
+        Connection con = null;
+        try {
+            con = ResourcesManager.getConnection();
+            con.setAutoCommit(false);
+
+            OfferDao.getInstance().update(offer, con);
+
+            con.commit();
+        } catch (SQLException ex) {
+            ResourcesManager.rollbackTransactions(con);
+            throw new AgencyException("Error updating offer " + offer, ex);
+        } finally {
+            ResourcesManager.closeConnection(con);
+        }
+    }
+
+    public void deleteOffer(int offer_id) throws AgencyException {
+        Connection con = null;
+        try {
+            con = ResourcesManager.getConnection();
+            con.setAutoCommit(false);
+
+            Offer offer = OfferDao.getInstance().find(offer_id, con);
+            if (offer != null) {
+                OfferDao.getInstance().delete(offer, con);
+            }
+
+            con.commit();
+        } catch (SQLException ex) {
+            ResourcesManager.rollbackTransactions(con);
+            throw new AgencyException("Error deleting offer " + offer_id, ex);
         } finally {
             ResourcesManager.closeConnection(con);
         }
     }
 
     /*
-    public Ponuda findPonudaOpis(String opis) throws Zadatak2Exception {
-        Connection con = null;
-        try {
-            con = ResourcesManager.getConnection();
-
-            return PonudaDao.getInstance().findByOpis(opis, con);
-
-        } catch (SQLException ex) {
-            throw new Zadatak2Exception("Ne postoji ponuda sa reči " + opis + " u opisu", ex);
-        } finally {
-            ResourcesManager.closeConnection(con);
-        }
-    }
+    Part related to Offer Type
      */
-    public List<Ponuda> findAllPonuda() throws Zadatak2Exception {
-
+    
+    public void addNewOfferType(OfferType offer_type) throws AgencyException {
         Connection con = null;
         try {
             con = ResourcesManager.getConnection();
-            return PonudaDao.getInstance().findAll(con);
+
+            OfferTypeDao.getInstance().insert(offer_type, con);
         } catch (SQLException ex) {
-            throw new Zadatak2Exception("Greska u nalazenju ponuda ", ex);
+            throw new AgencyException("Error adding offer type " + offer_type, ex);
         } finally {
             ResourcesManager.closeConnection(con);
         }
     }
 
-    public void updatePonuda(Ponuda ponuda) throws Zadatak2Exception {
+    public OfferType findOfferType(int offer_type_id) throws AgencyException {
+        Connection con = null;
+        try {
+            con = ResourcesManager.getConnection();
+
+            return OfferTypeDao.getInstance().find(offer_type_id, con);
+
+        } catch (SQLException ex) {
+            throw new AgencyException("Error finding offer type " + offer_type_id, ex);
+        } finally {
+            ResourcesManager.closeConnection(con);
+        }
+    }
+
+    public List<OfferType> findAllOfferType() throws AgencyException {
+        Connection con = null;
+        try {
+            con = ResourcesManager.getConnection();
+
+            return OfferTypeDao.getInstance().findAll(con);
+
+        } catch (SQLException ex) {
+            throw new AgencyException("Error finding offer typess", ex);
+        } finally {
+            ResourcesManager.closeConnection(con);
+        }
+    }
+
+    public void updateOfferType(OfferType offerType) throws AgencyException {
         Connection con = null;
         try {
             con = ResourcesManager.getConnection();
             con.setAutoCommit(false);
 
-            PonudaDao.getInstance().update(ponuda, con);
+            OfferTypeDao.getInstance().update(offerType, con);
 
             con.commit();
         } catch (SQLException ex) {
             ResourcesManager.rollbackTransactions(con);
-            throw new Zadatak2Exception("Neuspešno ažuriranje ponude " + ponuda, ex);
+            throw new AgencyException("Error updating offer types " + offerType, ex);
         } finally {
             ResourcesManager.closeConnection(con);
         }
     }
 
-    public void deletePonuda(int ponuda_id) throws Zadatak2Exception {
+    public void deleteOfferType(int offer_type_id) throws AgencyException {
         Connection con = null;
         try {
             con = ResourcesManager.getConnection();
             con.setAutoCommit(false);
 
-            Ponuda ponuda = PonudaDao.getInstance().find(ponuda_id, con);
-            if (ponuda != null) {
-                PonudaDao.getInstance().delete(ponuda, con);
+            OfferType offerType = OfferTypeDao.getInstance().find(offer_type_id, con);
+            if (offerType != null) {
+                OfferTypeDao.getInstance().delete(offer_type_id, con);
             }
 
             con.commit();
         } catch (SQLException ex) {
             ResourcesManager.rollbackTransactions(con);
-            throw new Zadatak2Exception("Neuspešno brisanje ponude " + ponuda_id, ex);
+            throw new AgencyException("Error deleting offer types " + offer_type_id, ex);
         } finally {
             ResourcesManager.closeConnection(con);
         }
     }
 
     /*
-    Deo vezan za vrstu ponude
+    Part related to Offer Picture
      */
-    public void addNewPonudaVrsta(PonudaVrsta ponuda_vrsta) throws Zadatak2Exception {
+    public void addNewOfferPicture(OfferPicture offer_picture) throws AgencyException {
         Connection con = null;
         try {
             con = ResourcesManager.getConnection();
 
-            PonudaVrstaDao.getInstance().insert(ponuda_vrsta, con);
+            OfferPictureDao.getInstance().insert(offer_picture, con);
         } catch (SQLException ex) {
-            throw new Zadatak2Exception("Neuspešno dodavanje vrste ponude " + ponuda_vrsta, ex);
+            throw new AgencyException("Error adding offer picture " + offer_picture, ex);
         } finally {
             ResourcesManager.closeConnection(con);
         }
     }
 
-    public PonudaVrsta findPonudaVrsta(int ponuda_vrsta_id) throws Zadatak2Exception {
+    public OfferPicture findOfferPicture(int offer_picture_id) throws AgencyException {
         Connection con = null;
         try {
             con = ResourcesManager.getConnection();
 
-            return PonudaVrstaDao.getInstance().find(ponuda_vrsta_id, con);
+            return OfferPictureDao.getInstance().find(offer_picture_id, con);
 
         } catch (SQLException ex) {
-            throw new Zadatak2Exception("Ne postoji vrsta ponude " + ponuda_vrsta_id, ex);
+            throw new AgencyException("Error finding offer picture " + offer_picture_id, ex);
         } finally {
             ResourcesManager.closeConnection(con);
         }
     }
 
-    public List<PonudaVrsta> findAllPonudaVrsta() throws Zadatak2Exception {
+    public List<OfferPicture> findAllOfferPicture(int offer_id) throws AgencyException {
+
         Connection con = null;
         try {
             con = ResourcesManager.getConnection();
-
-            return PonudaVrstaDao.getInstance().findAll(con);
-
+            return OfferPictureDao.getInstance().findAllOfferPictureByOfferId(offer_id, con);
         } catch (SQLException ex) {
-            throw new Zadatak2Exception("Ne postoje vrste ponuda ", ex);
+            throw new AgencyException("Error finding offer pictures ", ex);
         } finally {
             ResourcesManager.closeConnection(con);
         }
     }
 
-    public void updatePonudaVrsta(PonudaVrsta ponudaVrsta) throws Zadatak2Exception {
+    public void updateOfferPicture(OfferPicture offerPicture) throws AgencyException {
         Connection con = null;
         try {
             con = ResourcesManager.getConnection();
             con.setAutoCommit(false);
 
-            PonudaVrstaDao.getInstance().update(ponudaVrsta, con);
+            OfferPictureDao.getInstance().update(offerPicture, con);
 
             con.commit();
         } catch (SQLException ex) {
             ResourcesManager.rollbackTransactions(con);
-            throw new Zadatak2Exception("Neuspešno ažuriranje vrste ponude " + ponudaVrsta, ex);
+            throw new AgencyException("Error updating offer picture " + offerPicture, ex);
         } finally {
             ResourcesManager.closeConnection(con);
         }
     }
 
-    public void deletePonudaVrsta(int ponuda_vrsta_id) throws Zadatak2Exception {
+    public void deleteOfferPicture(int offer_picture_id) throws AgencyException {
         Connection con = null;
         try {
             con = ResourcesManager.getConnection();
             con.setAutoCommit(false);
 
-            PonudaVrsta ponudaVrsta = PonudaVrstaDao.getInstance().find(ponuda_vrsta_id, con);
-            if (ponudaVrsta != null) {
-                PonudaVrstaDao.getInstance().delete(ponuda_vrsta_id, con);
+            OfferPicture offerPicture = OfferPictureDao.getInstance().find(offer_picture_id, con);
+            if (offerPicture != null) {
+                OfferPictureDao.getInstance().delete(offer_picture_id, con);
             }
 
             con.commit();
         } catch (SQLException ex) {
             ResourcesManager.rollbackTransactions(con);
-            throw new Zadatak2Exception("Neuspešno brisanje vrste ponude " + ponuda_vrsta_id, ex);
-        } finally {
-            ResourcesManager.closeConnection(con);
-        }
-    }
-
-    /*
-    Deo vezan za sliku ponude
-     */
-    public void addNewPonudaSlika(PonudaSlika ponuda_slika) throws Zadatak2Exception {
-        Connection con = null;
-        try {
-            con = ResourcesManager.getConnection();
-
-            PonudaSlikaDao.getInstance().insert(ponuda_slika, con);
-        } catch (SQLException ex) {
-            throw new Zadatak2Exception("Neuspešno dodavanje slike ponude " + ponuda_slika, ex);
-        } finally {
-            ResourcesManager.closeConnection(con);
-        }
-    }
-
-    public PonudaSlika findPonudaSlika(int ponuda_slika_id) throws Zadatak2Exception {
-        Connection con = null;
-        try {
-            con = ResourcesManager.getConnection();
-
-            return PonudaSlikaDao.getInstance().find(ponuda_slika_id, con);
-
-        } catch (SQLException ex) {
-            throw new Zadatak2Exception("Ne postoji slika ponude " + ponuda_slika_id, ex);
-        } finally {
-            ResourcesManager.closeConnection(con);
-        }
-    }
-
-    public List<PonudaSlika> findAllPonudaSlika(int ponuda_id) throws Zadatak2Exception {
-
-        Connection con = null;
-        try {
-            con = ResourcesManager.getConnection();
-            return PonudaSlikaDao.getInstance().findAllPonudaSlikaByPonudaId(ponuda_id, con);
-        } catch (SQLException ex) {
-            throw new Zadatak2Exception("Greska u nalazenju slika ponude ", ex);
-        } finally {
-            ResourcesManager.closeConnection(con);
-        }
-    }
-
-    public void updatePonudaSlika(PonudaSlika ponudaSlika) throws Zadatak2Exception {
-        Connection con = null;
-        try {
-            con = ResourcesManager.getConnection();
-            con.setAutoCommit(false);
-
-            PonudaSlikaDao.getInstance().update(ponudaSlika, con);
-
-            con.commit();
-        } catch (SQLException ex) {
-            ResourcesManager.rollbackTransactions(con);
-            throw new Zadatak2Exception("Neuspešno ažuriranje slike ponude " + ponudaSlika, ex);
-        } finally {
-            ResourcesManager.closeConnection(con);
-        }
-    }
-
-    public void deletePonudaSlika(int ponuda_slika_id) throws Zadatak2Exception {
-        Connection con = null;
-        try {
-            con = ResourcesManager.getConnection();
-            con.setAutoCommit(false);
-
-            PonudaSlika ponudaSlika = PonudaSlikaDao.getInstance().find(ponuda_slika_id, con);
-            if (ponudaSlika != null) {
-                PonudaSlikaDao.getInstance().delete(ponuda_slika_id, con);
-            }
-
-            con.commit();
-        } catch (SQLException ex) {
-            ResourcesManager.rollbackTransactions(con);
-            throw new Zadatak2Exception("Neuspešno brisanje slike ponude " + ponuda_slika_id, ex);
+            throw new AgencyException("Error deleting offer picture  " + offer_picture_id, ex);
         } finally {
             ResourcesManager.closeConnection(con);
         }

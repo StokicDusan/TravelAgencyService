@@ -1,11 +1,11 @@
 package com.etf.zadatak2.sevice;
 
-import com.etf.zadatak2.dao.AranzmanDao;
+import com.etf.zadatak2.dao.ArrangementDao;
 import com.etf.zadatak2.dao.ResourcesManager;
-import com.etf.zadatak2.data.Aranzman;
-import com.etf.zadatak2.data.Korisnik;
-import com.etf.zadatak2.data.Ponuda;
-import com.etf.zadatak2.exception.Zadatak2Exception;
+import com.etf.zadatak2.data.Arrangement;
+import com.etf.zadatak2.data.Customer;
+import com.etf.zadatak2.data.Offer;
+import com.etf.zadatak2.exception.AgencyException;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.List;
@@ -14,65 +14,65 @@ import java.util.List;
  *
  * @author Dušan Stokić 2013/0625
  */
-public class AranzmanService {
+public class ArrangementService {
 
-    private static final AranzmanService instance = new AranzmanService();
+    private static final ArrangementService instance = new ArrangementService();
 
-    public AranzmanService() {
+    public ArrangementService() {
     }
 
-    public static AranzmanService getInstance() {
+    public static ArrangementService getInstance() {
         return instance;
     }
 
-    public void makeAranzman(Korisnik korisnik, Ponuda ponuda) throws Zadatak2Exception {
+    public void makeArrangement(Customer customer, Offer offer) throws AgencyException {
         Connection con = null;
         try {
             con = ResourcesManager.getConnection();
             con.setAutoCommit(false);
 
-            Aranzman aranzman = new Aranzman(korisnik, ponuda);
-            AranzmanDao.getInstance().insert(aranzman, con);
+            Arrangement arrangement = new Arrangement(customer, offer);
+            ArrangementDao.getInstance().insert(arrangement, con);
 
             con.commit();
 
         } catch (SQLException ex) {
             ResourcesManager.rollbackTransactions(con);
-            throw new Zadatak2Exception("Neuspešno pravljenje aranžmana ", ex);
+            throw new AgencyException("Error adding arrangement ", ex);
         } finally {
             ResourcesManager.closeConnection(con);
         }
 
     }
 
-    public List<Aranzman> findAllAranzman() throws Zadatak2Exception {
+    public List<Arrangement> findAllArrangement() throws AgencyException {
 
         Connection con = null;
         try {
 
             con = ResourcesManager.getConnection();
-            return AranzmanDao.getInstance().findAll(con);
+            return ArrangementDao.getInstance().findAll(con);
         } catch (SQLException ex) {
-            throw new Zadatak2Exception("Neuspešno pronalaženje aranžmana ", ex);
+            throw new AgencyException("Error finding arrangements ", ex);
         } finally {
             ResourcesManager.closeConnection(con);
         }
     }
 
-    public void deleteAranzman(int aranzman_id) throws Zadatak2Exception, SQLException {
+    public void deleteArrangement(int arrangement_id) throws AgencyException, SQLException {
         Connection con = null;
         try {
             con = ResourcesManager.getConnection();
             con.setAutoCommit(false);
 
-            Aranzman aranzman = AranzmanDao.getInstance().find(aranzman_id, con);
-            if (aranzman != null) {
-                AranzmanDao.getInstance().delete(aranzman, con);
+            Arrangement arrangement = ArrangementDao.getInstance().find(arrangement_id, con);
+            if (arrangement != null) {
+                ArrangementDao.getInstance().delete(arrangement, con);
             }
             con.commit();
         } catch (SQLException ex) {
             ResourcesManager.rollbackTransactions(con);
-            throw new Zadatak2Exception("Neuspešno brisanje aranzmana ", ex);
+            throw new AgencyException("Error deleting arrangement ", ex);
         } finally {
             ResourcesManager.closeConnection(con);
         }
