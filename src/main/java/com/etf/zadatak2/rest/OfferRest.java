@@ -4,7 +4,7 @@ import com.etf.zadatak2.data.Offer;
 import com.etf.zadatak2.data.OfferPicture;
 import com.etf.zadatak2.data.OfferType;
 import com.etf.zadatak2.exception.AgencyException;
-import com.etf.zadatak2.sevice.OfferService;
+import com.etf.zadatak2.service.OfferService;
 import java.util.List;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;

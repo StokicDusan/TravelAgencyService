@@ -1,4 +1,4 @@
-package com.etf.zadatak2.sevice;
+package com.etf.zadatak2.service;
 
 import com.etf.zadatak2.dao.OfferDao;
 import com.etf.zadatak2.dao.OfferPictureDao;

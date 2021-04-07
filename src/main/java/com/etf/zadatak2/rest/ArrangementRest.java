@@ -2,7 +2,7 @@ package com.etf.zadatak2.rest;
 
 import com.etf.zadatak2.data.Arrangement;
 import com.etf.zadatak2.exception.AgencyException;
-import com.etf.zadatak2.sevice.ArrangementService;
+import com.etf.zadatak2.service.ArrangementService;
 import java.sql.SQLException;
 import java.util.List;
 import javax.ws.rs.Consumes;

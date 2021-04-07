@@ -4,7 +4,7 @@ import com.etf.zadatak2.data.Address;
 import com.etf.zadatak2.data.Contact;
 import com.etf.zadatak2.data.Customer;
 import com.etf.zadatak2.exception.AgencyException;
-import com.etf.zadatak2.sevice.CustomerService;
+import com.etf.zadatak2.service.CustomerService;
 import java.sql.SQLException;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
