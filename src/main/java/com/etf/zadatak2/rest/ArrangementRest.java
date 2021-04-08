@@ -1,8 +1,8 @@
 package com.etf.zadatak2.rest;
 
-import com.etf.zadatak2.data.Aranzman;
-import com.etf.zadatak2.exception.Zadatak2Exception;
-import com.etf.zadatak2.sevice.AranzmanService;
+import com.etf.zadatak2.data.Arrangement;
+import com.etf.zadatak2.exception.AgencyException;
+import com.etf.zadatak2.service.ArrangementService;
 import java.sql.SQLException;
 import java.util.List;
 import javax.ws.rs.Consumes;
@@ -15,30 +15,30 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
-@Path("aranzman")
-public class AranzmanRest {
+@Path("arrangement")
+public class ArrangementRest {
 
-    private final AranzmanService aranzmanService = AranzmanService.getInstance();
+    private final ArrangementService arrangementService = ArrangementService.getInstance();
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)
-    public List<Aranzman> getAranzman() throws Zadatak2Exception {
-        return aranzmanService.findAllAranzman();
+    public List<Arrangement> getArrangement() throws AgencyException {
+        return arrangementService.findAllArrangement();
     }
 
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public Response makeAranzman(Aranzman aranzman) throws Zadatak2Exception {
-        aranzmanService.makeAranzman(aranzman.getKorisnik(), aranzman.getPonuda());
+    public Response makeArrangement(Arrangement arrangement) throws AgencyException {
+        arrangementService.makeArrangement(arrangement.getCustomer(), arrangement.getOffer());
         return Response.ok().build();
     }
 
     @DELETE
-    @Path("/{aranzman_id}")
+    @Path("/{arrangement_id}")
     @Produces(MediaType.APPLICATION_JSON)
-    public Response deleteAranzman(@PathParam("aranzman_id") int aranzman_id) throws Zadatak2Exception, SQLException {
-        aranzmanService.deleteAranzman(aranzman_id);
+    public Response deleteArrangement(@PathParam("arrangement_id") int arrangement_id) throws AgencyException, SQLException {
+        arrangementService.deleteArrangement(arrangement_id);
         return Response.ok().build();
     }
 

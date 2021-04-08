@@ -1,6 +1,6 @@
 package com.etf.zadatak2.dao;
 
-import com.etf.zadatak2.exception.Zadatak2Exception;
+import com.etf.zadatak2.exception.AgencyException;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
@@ -38,22 +38,22 @@ public class ResourcesManager {
         }
     }
 
-    public static void closeConnection(Connection con) throws Zadatak2Exception {
+    public static void closeConnection(Connection con) throws AgencyException {
         if (con != null) {
             try {
                 con.close();
             } catch (SQLException ex) {
-                throw new Zadatak2Exception("Failed to close database connection.", ex);
+                throw new AgencyException("Failed to close database connection.", ex);
             }
         }
     }
 
-    public static void rollbackTransactions(Connection con) throws Zadatak2Exception {
+    public static void rollbackTransactions(Connection con) throws AgencyException {
         if (con != null) {
             try {
                 con.rollback();
             } catch (SQLException ex) {
-                throw new Zadatak2Exception("Failed to rollback database transactions.", ex);
+                throw new AgencyException("Failed to rollback database transactions.", ex);
             }
         }
     }
