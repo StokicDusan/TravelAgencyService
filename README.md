@@ -99,5 +99,5 @@ Contributions are what make the open source community such an amazing place to b
 [repo-size-url]: https://img.shields.io/github/repo-size/ConusDaktis/TravelAgencyService
 [linkedin-shield]: https://img.shields.io/badge/LinkedIn-0077B5?style=plastice&logo=linkedin&logoColor=white
 [linkedin-url]: https://linkedin.com/in/stokicdusan
-[database-screenshot]: src/main/resources/database/database.PNG?raw=true
+[database-screenshot]: src/main/resources/database/database.png
 [localhost-url]: http://localhost:8080/TravelAgencyService
