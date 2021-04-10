@@ -101,3 +101,4 @@ Contributions are what make the open source community such an amazing place to b
 [linkedin-url]: https://linkedin.com/in/stokicdusan
 [database-screenshot]: src/main/resources/database/database.png
 [localhost-url]: http://localhost:8080/TravelAgencyService
+
