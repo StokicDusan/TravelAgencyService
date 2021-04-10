@@ -13,7 +13,7 @@ import java.sql.SQLException;
  */
 public class ResourcesManager {
 
-    private static final String JDBC_CONNECTION_STRING = "jdbc:mysql://localhost:3308/zadatak2tema8?user=root&password=";
+    private static final String JDBC_CONNECTION_STRING = "jdbc:mysql://localhost:<PORT_USED_BY_MYSQL>/<NAME_OF_DB>?user=root&password=";
     private static final String DRIVER = "com.mysql.jdbc.Driver";
 
     static {
