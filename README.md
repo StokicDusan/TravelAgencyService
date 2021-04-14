@@ -87,17 +87,18 @@ Contributions are what make the open source community such an amazing place to b
 5. Open a Pull Request
 
 <!-- MARKDOWN LINKS & IMAGES -->
-[contributors-shield]: https://img.shields.io/github/contributors/ConusDaktis/TravelAgencyService
-[contributors-url]: https://github.com/ConusDaktis/TravelAgencyService/graphs/contributors
-[forks-shield]: https://img.shields.io/github/forks/ConusDaktis/TravelAgencyService?style=social
-[forks-url]: https://github.com/ConusDaktis/TravelAgencyService/network/members
-[issues-shield]: https://img.shields.io/github/issues/ConusDaktis/TravelAgencyService
-[issues-url]: https://github.com/ConusDaktis/TravelAgencyService/issues
-[commit-activity-shield]: https://img.shields.io/github/last-commit/ConusDaktis/TravelAgencyService
-[commit-activity-url]: https://github.com/ConusDaktis/TravelAgencyService/graphs/commit-activity
-[repo-size-shield]: https://img.shields.io/github/repo-size/ConusDaktis/TravelAgencyService
-[repo-size-url]: https://img.shields.io/github/repo-size/ConusDaktis/TravelAgencyService
+[contributors-shield]: https://img.shields.io/github/contributors/StokicDusan/TravelAgencyService
+[contributors-url]: https://github.com/StokicDusan/TravelAgencyService/graphs/contributors
+[forks-shield]: https://img.shields.io/github/forks/StokicDusan/TravelAgencyService?style=social
+[forks-url]: https://github.com/StokicDusan/TravelAgencyService/network/members
+[issues-shield]: https://img.shields.io/github/issues/StokicDusan/TravelAgencyService
+[issues-url]: https://github.com/StokicDusan/TravelAgencyService/issues
+[commit-activity-shield]: https://img.shields.io/github/last-commit/StokicDusan/TravelAgencyService
+[commit-activity-url]: https://github.com/StokicDusan/TravelAgencyService/graphs/commit-activity
+[repo-size-shield]: https://img.shields.io/github/repo-size/StokicDusan/TravelAgencyService
+[repo-size-url]: https://img.shields.io/github/repo-size/StokicDusan/TravelAgencyService
 [linkedin-shield]: https://img.shields.io/badge/LinkedIn-0077B5?style=plastice&logo=linkedin&logoColor=white
 [linkedin-url]: https://linkedin.com/in/stokicdusan
-[database-screenshot]: src/main/resources/database/database.PNG?raw=true
+[database-screenshot]: src/main/resources/database/database.png
 [localhost-url]: http://localhost:8080/TravelAgencyService
+
