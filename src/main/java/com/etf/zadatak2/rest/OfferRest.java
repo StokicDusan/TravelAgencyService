@@ -56,7 +56,7 @@ public class OfferRest {
     @GET
     @Path("/type_of_offer/{type}")
     @Produces(MediaType.APPLICATION_JSON)
-    public List<Offer> getOfferByVrsta(@PathParam("type") String type) throws AgencyException {
+    public List<Offer> getOfferByType(@PathParam("type") String type) throws AgencyException {
         return offerService.findOfferType(type);
     }
 
