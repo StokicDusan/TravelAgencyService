@@ -49,7 +49,7 @@ These instructions will get you a copy of the project up and running on your loc
 #### 1. Clone the repository
 
 ```
-git clone https://github.com/ConusDaktis/TravelAgencyService.git
+git clone https://github.com/StokicDusan/TravelAgencyService.git
 ```
 
 #### 2. Launch the server and import the test database from 
