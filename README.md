@@ -20,9 +20,9 @@ The operation of the service has been confirmed by the Postman client.
 ### Built With
 
 This are the major frameworks that are used to built this project.
-* [MySQL Workbench](https://dev.mysql.com/downloads/workbench/apa)
-* [Apache NetBeans](https://netbeans.apache.org/)
-* [Wamp Server](https://www.wampserver.com/en/)
+* [MySQL Workbench](https://dev.mysql.com/downloads/workbench/apa),
+* [Apache NetBeans](https://netbeans.apache.org/),
+* [Wamp Server](https://www.wampserver.com/en/).
 
 <!-- DESIGN -->
 ## Design
@@ -38,11 +38,11 @@ These instructions will get you a copy of the project up and running on your loc
 
 ### Prerequisites
 
-#### 1. Download and install Apache NetBeans and Wamp Server
+#### 1. Download and install Apache NetBeans and Wamp Server,
 
-#### 2. Run Wamp server on your local machine
+#### 2. Run Wamp server on your local machine,
 
-#### 3. In Apache NetBeans IDE add a GlassFish server instance on localhost on HTTP port 8080
+#### 3. In Apache NetBeans IDE add a GlassFish server instance on localhost on HTTP port 8080.
 
 ### Running the app
 
@@ -52,7 +52,7 @@ These instructions will get you a copy of the project up and running on your loc
 git clone https://github.com/StokicDusan/TravelAgencyService.git
 ```
 
-#### 2. Launch the server and import the test database from 
+#### 2. Launch the server and import the test database from
 ```
 src\main\resources\database
 ```
