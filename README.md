@@ -1,7 +1,7 @@
-[![Contributors][contributors-shield]][contributors-url]
 [![Commit-activity][commit-activity-shield]][commit-activity-url]
 [![Issues][issues-shield]][issues-url]
 [![Repo-size][repo-size-shield]][repo-size-url]
+[![License][license-shield]][license-url]  
 [![Forks][forks-shield]][forks-url]
 [![LinkedIn][linkedin-shield]][linkedin-url]
 
@@ -95,6 +95,8 @@ Contributions are what make the open source community such an amazing place to b
 [issues-url]: https://github.com/StokicDusan/TravelAgencyService/issues
 [commit-activity-shield]: https://img.shields.io/github/last-commit/StokicDusan/TravelAgencyService
 [commit-activity-url]: https://github.com/StokicDusan/TravelAgencyService/graphs/commit-activity
+[license-url]: https://github.com/StokicDusan/TravelAgencyService/blob/master/LICENSE
+[license-shield]: https://img.shields.io/github/license/StokicDusan/TravelAgencyService
 [repo-size-shield]: https://img.shields.io/github/repo-size/StokicDusan/TravelAgencyService
 [repo-size-url]: https://img.shields.io/github/repo-size/StokicDusan/TravelAgencyService
 [linkedin-shield]: https://img.shields.io/badge/LinkedIn-0077B5?style=plastice&logo=linkedin&logoColor=white
