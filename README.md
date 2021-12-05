@@ -12,7 +12,7 @@ Example of a service side of an application for a travel agency.
 ## About The Project
 
 The application allows the user to search the database of travel arrangements of the travel agency. Search data includes travel type (winter, summer, trip, etc.), country, city, and search keyword.
-Maven Java Web application was build for working with TravelAgencyDB, as well as expose the data through the REST API so that it can be accessed from Android client application.
+Maven Java Web application was build for working with [TravelAgencyDB][database], as well as expose the data through the REST API so that it can be accessed from Android client application.
 Access to databases is performed via the JDBC API.
 
 The operation of the service has been confirmed by the Postman client. 
@@ -82,6 +82,7 @@ If you encounter any bugs or have suggestions, please file an issue in the
 section of the project.
 
 <!-- MARKDOWN LINKS & IMAGES -->
+[database]: src/main/resources/database/database.sql
 [contributors-shield]: https://img.shields.io/github/contributors/StokicDusan/TravelAgencyService
 [contributors-url]: https://github.com/StokicDusan/TravelAgencyService/graphs/contributors
 [forks-shield]: https://img.shields.io/github/forks/StokicDusan/TravelAgencyService?style=social
